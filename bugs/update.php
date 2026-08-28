@@ -1,18 +1,28 @@
+```php
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 0);
 
-require_once __DIR__ . '/../config/database.php'; 
+session_start();
+
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../classes/BugRepository.php';
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
 $title = trim($_POST['title'] ?? '');
 $description = trim($_POST['description'] ?? '');
 $language = trim($_POST['language'] ?? '');
 $category = trim($_POST['category'] ?? '');
-$difficulty = $_POST['difficulty'] ?? '';
+$difficulty = trim($_POST['difficulty'] ?? '');
 $cause = trim($_POST['cause'] ?? '');
 $solution = trim($_POST['solution'] ?? '');
 $lesson = trim($_POST['lesson'] ?? '');
+
+if ($id === false || $id === null) {
+    die("Invalid ID");
+}
 
 if ($title === "") {
     die("The title is mandatory.");
@@ -47,7 +57,7 @@ if (strlen($title) < 3 || strlen($title) > 50) {
 }
 
 if (strlen($description) < 10 || strlen($description) > 250) {
-    die("The description must have between 10 and 250 characters");
+    die("The description must have between 10 and 250 characters.");
 }
 
 $allowedDifficulties = ['easy', 'medium', 'hard'];
@@ -58,9 +68,16 @@ if (!in_array($difficulty, $allowedDifficulties)) {
 
 try {
 
-    $repository = New BugRepository($pdo);
+    $repository = new BugRepository($pdo);
 
-    $repository->create(
+    $bug = $repository->findById($id);
+
+    if ($bug === null) {
+        die("Bug not found");
+    }
+
+    $repository->update(
+        $id,
         $title,
         $description,
         $language,
@@ -71,9 +88,12 @@ try {
         $lesson
     );
 
-    echo "The Bug has been logged";
+    $_SESSION['success'] = "Bug updated successfully.";
+
+    header('Location: index.php');
+    exit;
 
 } catch (PDOException $e) {
 
-    echo "Something went wrong while creating the bug";
+    echo "Something went wrong while updating the bug.";
 }

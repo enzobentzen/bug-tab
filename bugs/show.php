@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0);
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../classes/BugRepository.php';
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
@@ -11,13 +12,11 @@ if ($id === false || $id === null) {
     die("Invalid ID");
 }
 
-$stmt = $pdo->prepare("SELECT * FROM bugs WHERE id = :id");
+$repository = New BugRepository($pdo);
 
-$stmt->execute([':id' => $id]);
+$bug = $repository->findByID($id);
 
-$bug = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$bug) {
+if ($bug === null) {
     die("Bug not found");
 }
 
