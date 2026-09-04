@@ -20,7 +20,7 @@ if ($id === false || $id === null) {
 
 try { 
     
-    $repository = New BugRepository($pdo);
+    $repository = new BugRepository($pdo);
 
     $bug = $repository->findByID($id);
 
@@ -31,6 +31,8 @@ try {
 
      exit;
     }
+
+    echo json_encode($bug);
 
 } catch(PDOException $e) {
 

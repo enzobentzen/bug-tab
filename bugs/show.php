@@ -12,9 +12,9 @@ if ($id === false || $id === null) {
     die("Invalid ID");
 }
 
-$repository = New BugRepository($pdo);
+$repository = new BugRepository($pdo);
 
-$bug = $repository->findByID($id);
+$bug = $repository->findbyId($id);
 
 if ($bug === null) {
     die("Bug not found");

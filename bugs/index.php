@@ -10,7 +10,7 @@ require_once __DIR__ . '/../classes/BugRepository.php';
 
 $repository = New BugRepository($pdo);
 
-$repository->findAll();
+$bugs = $repository->findAll();
 
 if (isset($_SESSION['success'])) {  //verifica se existe a variável de sessão success
     echo $_SESSION['success']; //imprime o valor dessa variável na tela

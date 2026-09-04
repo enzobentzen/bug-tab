@@ -3,7 +3,7 @@
 session_start();
 
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../class/BugRepository.php';
+require_once __DIR__ . '/../classes/BugRepository.php';
 
 
 error_reporting(E_ALL);
@@ -15,14 +15,14 @@ if ($id === false || $id === null) {
     die("Invalid ID");
 }
 
-$repository = New BugRepository($pdo);
+$repository = new BugRepository($pdo);
 
 $delete = $repository->delete($id);
 
-if (!$delete === null) {
+if (!$delete) {
     $_SESSION['error'] = 'Bug not found.';
 } else {
-    $_SESSION['sucess'] = 'Bug deleted successfully.';
+    $_SESSION['success'] = 'Bug deleted successfully.';
 }
 
 header('Location: index.php');
