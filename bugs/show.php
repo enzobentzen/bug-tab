@@ -14,7 +14,7 @@ if ($id === false || $id === null) {
 
 $repository = new BugRepository($pdo);
 
-$bug = $repository->findbyId($id);
+$bug = $repository->findbyI($id);
 
 if ($bug === null) {
     die("Bug not found");

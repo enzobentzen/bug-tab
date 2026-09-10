@@ -2,9 +2,9 @@
 
 class BugRepository
 {
-    private PDO$pdo;
+    private PDO $pdo;
 
-    public function __construct(PDO$pdo)
+    public function __construct(PDO $pdo)
     {
        $this->pdo =$pdo;
     }
@@ -20,7 +20,7 @@ class BugRepository
         string $lesson
     ): void {
 
-       $stmt =$this->pdo->prepare(
+       $stmt = $this->pdo->prepare(
             "INSERT INTO bugs
             (title, description, language, category, difficulty, cause, solution, lesson)
             VALUES
