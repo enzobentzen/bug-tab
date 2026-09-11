@@ -57,13 +57,21 @@ if (strlen($password) < 8) {
     exit;
 }
 
+
+ $repository = new UserRepository($pdo);
+
+ $existingUser = $repository->findByEmail($email);
+
+if ($existingUser !== null) {
+    $_SESSION['error'] = "Email already registered";
+    header('Location: register.php');
+    exit;
+}
 //pega a senha que o usuario digitou e transforma em um hash seguro
 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
 
 try {
-
-    $repository = new UserRepository($pdo);
 
     $repository->create(
         $name,
@@ -71,9 +79,15 @@ try {
         $passwordHash
     );
 
-    echo "Account created successfully";
+    $_SESSION['success'] = "Account created successfully";
 
 } catch (PDOException $e) {
-    echo "Something went wrong while creating account.";
+
+    $_SESSION['success'] = "Something went wrong while creating account.";
+
+    header('Location: register.php');
+    exit;
 
 }
+
+// amanha preciso verificar para caso teha todos os erros, aparecer todas as mensagens 
